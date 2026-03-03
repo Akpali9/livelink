@@ -7,7 +7,7 @@ const links = [
   { to: "/become-creator", label: "Become a Creator", type: "bg" },
   { to: "/become-business", label: "Register Business", type: "border" },
   { to: "/browse-businesses", label: "Find Brands", type: "border" },
-  { to: "/login/portal", label: "Find Creators", type: "border" }
+  { to: "/browse", label: "Find Creators", type: "border" }
 ];
 
 const trustItems = [

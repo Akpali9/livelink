@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";;
 import {
   Search,
   Filter,
@@ -8,7 +8,7 @@ import {
   X,
   CheckCircle2
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion"
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { AppHeader } from "../components/app-header";
 import { supabase } from "../lib/supabase";

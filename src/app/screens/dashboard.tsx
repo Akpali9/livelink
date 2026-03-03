@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";;
 import { supabase } from "../lib/supabase";
 import { AppHeader } from "../components/app-header";
 import { BottomNav } from "../components/bottom-nav";
@@ -18,7 +18,7 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion"
 import { toast, Toaster } from "sonner";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { DeclineOfferModal } from "../components/decline-offer-modal";

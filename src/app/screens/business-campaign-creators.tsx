@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";;
 import { ArrowLeft, ChevronRight, Star, Tv } from "lucide-react";
 import { AppHeader } from "../components/app-header";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";

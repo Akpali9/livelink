@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams, Link } from "react-router";
+import { useNavigate, useParams, Link } from "react-router-dom";;
 import { 
   ArrowLeft, 
   Bookmark, 
@@ -24,7 +24,7 @@ import {
   ExternalLink,
   ArrowRight
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion"
 import { toast, Toaster } from "sonner";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { AppHeader } from "../components/app-header";

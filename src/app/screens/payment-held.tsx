@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";;
 import { CheckCircle2, Clock, Bell, ShieldCheck, Mail, LayoutDashboard, Search } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"
 import { AppHeader } from "../components/app-header";
 import { supabase } from "../lib/supabase";
 

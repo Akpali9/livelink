@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";;
 import { ArrowLeft, ArrowRight, MessageSquare, Bell, User, Plus, Minus } from "lucide-react";
 import { motion } from 'framer-motion'
 import { createClient } from "@supabase/supabase-js";
