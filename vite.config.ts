@@ -5,24 +5,14 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-    dedupe: ['react', 'react-dom'],
+    alias: { '@': path.resolve(__dirname, './src') },
+    dedupe: ['react', 'react-dom']
   },
   build: {
     rollupOptions: {
-      // Only externalize Node-only packages that are NOT needed in the browser
-      external: [
-        'fs',      // Node file system
-        'path',    // Node path utilities
-        'os',      // Node OS info
-        'crypto',  // Node crypto
-        'stream',  // Node streams
-        'buffer'   // Node buffer
-      ],
+      // Only Node-only modules, never frontend libraries
+      external: ['fs', 'path', 'os', 'crypto', 'stream', 'buffer'],
       output: {
-        // Preserve import statements for externalized modules
         globals: {
           fs: 'fs',
           path: 'path',
@@ -34,5 +24,8 @@ export default defineConfig({
       }
     }
   },
-  assetsInclude: ['**/*.svg', '**/*.csv'],
+  optimizeDeps: {
+    include: ['lucide-react'] // ensures Vite pre-bundles lucide-react
+  },
+  assetsInclude: ['**/*.svg', '**/*.csv']
 })
