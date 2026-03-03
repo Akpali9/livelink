@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft, ArrowRight, MessageSquare, Bell, User, Plus, Minus } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from 'framer-motion'
 import { createClient } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 type PromoGoal = "sales" | "acquisition" | "downloads" | "signups" | "other" | null;
