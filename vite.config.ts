@@ -6,12 +6,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
-    dedupe: ['react', 'react-dom']
+    dedupe: ['react', 'react-dom'],
   },
   build: {
     rollupOptions: {
-     external: ['lucide-react']
+      // leave empty: frontend libraries should NOT be externalized
+      external: []
     }
   },
-  assetsInclude: ['**/*.svg', '**/*.csv']
+  assetsInclude: ['**/*.svg', '**/*.csv'],
 })
