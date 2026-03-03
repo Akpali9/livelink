@@ -5,14 +5,23 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { '@': path.resolve(__dirname, './src') },
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
     dedupe: ['react', 'react-dom'],
   },
   build: {
     rollupOptions: {
-      // leave empty: frontend libraries should NOT be externalized
-      external: []
-    }
+      // Only externalize Node modules or server-side packages
+      external: [
+        'fs',
+        'path',
+        'os',
+        'crypto',
+        'stream',
+        'buffer',
+      ],
+    },
   },
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
