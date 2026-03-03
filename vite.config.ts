@@ -12,16 +12,27 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // Only externalize Node modules or server-side packages
+      // Only externalize Node-only packages that are NOT needed in the browser
       external: [
-        'fs',
-        'path',
-        'os',
-        'crypto',
-        'stream',
-        'buffer',
+        'fs',      // Node file system
+        'path',    // Node path utilities
+        'os',      // Node OS info
+        'crypto',  // Node crypto
+        'stream',  // Node streams
+        'buffer'   // Node buffer
       ],
-    },
+      output: {
+        // Preserve import statements for externalized modules
+        globals: {
+          fs: 'fs',
+          path: 'path',
+          os: 'os',
+          crypto: 'crypto',
+          stream: 'stream',
+          buffer: 'buffer'
+        }
+      }
+    }
   },
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
