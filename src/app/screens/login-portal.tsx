@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router";
 // import { motion } from "motion/react";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import { Video as VideoIcon, Building, ArrowRight, ChevronRight } from "lucide-react";
 
 export function LoginPortal() {
