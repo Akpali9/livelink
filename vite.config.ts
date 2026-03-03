@@ -10,22 +10,11 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      // Only Node-only modules, never frontend libraries
-      external: ['fs', 'path', 'os', 'crypto', 'stream', 'buffer'],
-      output: {
-        globals: {
-          fs: 'fs',
-          path: 'path',
-          os: 'os',
-          crypto: 'crypto',
-          stream: 'stream',
-          buffer: 'buffer'
-        }
-      }
+      external: ['fs', 'path', 'os', 'crypto', 'stream', 'buffer']
     }
   },
   optimizeDeps: {
-    include: ['lucide-react'] // ensures Vite pre-bundles lucide-react
+    include: ['lucide-react', 'framer-motion']
   },
   assetsInclude: ['**/*.svg', '**/*.csv']
 })
