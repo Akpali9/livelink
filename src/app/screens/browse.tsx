@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router";
 import {
   Search,
   Filter,
@@ -8,7 +8,7 @@ import {
   X,
   CheckCircle2
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { AppHeader } from "../components/app-header";
 import { supabase } from "../lib/supabase";
@@ -71,7 +71,7 @@ export function Browse() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <AppHeader title="Browse Creators" showBack={true} />
+      {/* <AppHeader title="Browse Creators" showBack={true} /> */}
 
       {/* Search & Filters */}
       <div className="px-6 py-6 sticky top-[84px] bg-white z-20 border-b border-[#1D1D1D]">

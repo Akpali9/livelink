@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";;
+import { useNavigate } from "react-router";
 import { ArrowRight, Check, Lock, AlertTriangle, CreditCard, Info } from "lucide-react";
 import { AppHeader } from "../components/app-header";
 import { supabase } from "../lib/supabase";

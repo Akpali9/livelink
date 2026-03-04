@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";;
+import { useNavigate } from "react-router";
 import { ArrowLeft, ArrowRight, MessageSquare, Bell, User, Check } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 
 type CampaignType = "banner" | "banner-promo" | "promo-only" | null;
 

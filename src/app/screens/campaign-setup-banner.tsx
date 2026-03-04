@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";;
+import { useNavigate } from "react-router";
 import { ArrowLeft, ArrowRight, MessageSquare, Bell, User, Plus, Minus, Info } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 import { createClient } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 type CampaignGoal = "awareness" | "traffic" | "product" | "event" | "general" | null;

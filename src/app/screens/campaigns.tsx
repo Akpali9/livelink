@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";;
+import { useNavigate, Link } from "react-router";
 import { 
   ArrowLeft, 
   Search, 
@@ -10,7 +10,7 @@ import {
   AlertCircle,
   Video as VideoIcon
 } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { BottomNav } from "../components/bottom-nav";
 import { AppHeader } from "../components/app-header";

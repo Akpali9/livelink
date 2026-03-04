@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";;
+import { useNavigate, useParams } from "react-router";
 import {
   Check,
   CheckCircle2,
@@ -8,7 +8,7 @@ import {
   AlertTriangle,
   Lock,
 } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 import { AppHeader } from "../components/app-header";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { getCampaignById } from "../services/campaignService";

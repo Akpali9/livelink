@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Link } from "react-router-dom";;
+import { useNavigate, Link } from "react-router";
 import { 
   X, 
   RefreshCcw, 
@@ -10,7 +10,7 @@ import {
   CreditCard,
   ArrowLeft
 } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 import { AppHeader } from "../components/app-header";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 

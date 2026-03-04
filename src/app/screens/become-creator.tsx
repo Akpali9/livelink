@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";;
+import { useNavigate, Link } from "react-router";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -24,7 +24,7 @@ import {
   Mail,
   Smartphone
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "motion/react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { AppHeader } from "../components/app-header";
 

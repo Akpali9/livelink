@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";;
+import { useNavigate, useSearchParams } from "react-router";
 import { Search as SearchIcon } from "lucide-react";
 import { BottomNav } from "../components/bottom-nav";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";;
-import { motion } from "framer-motion"
+import { Link, useNavigate } from "react-router";
+import { motion } from "motion/react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome, Apple } from "lucide-react";
 import { supabase } from "../lib/supabase"; // adjust path as needed
 import { toast } from "sonner"; // optional: for notifications

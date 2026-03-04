@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";;
+import { useNavigate } from "react-router";
 import {
   ChevronDown,
   User,
@@ -13,7 +13,7 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "motion/react";
 import { AppHeader } from "../components/app-header";
 import { supabase } from "../lib/supabase"; 
 
