@@ -1,20 +1,23 @@
 import { defineConfig } from 'vite'
-import { fileURLToPath } from 'url'
-import { dirname, resolve } from 'path'
-import react from '@vitejs/plugin-react'
+import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    // The React and Tailwind plugins are both required for Make, even if
+    // Tailwind is not being actively used – do not remove them
+    react(),
+    tailwindcss(),
+  ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      // Alias @ to the src directory
+      '@': path.resolve(__dirname, './src'),
     },
+    dedupe: ['react', 'react-dom'],
   },
-  build: {
-    outDir: 'dist'
-  }
+
+  // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
+  assetsInclude: ['**/*.svg', '**/*.csv'],
 })
