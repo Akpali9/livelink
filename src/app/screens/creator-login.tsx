@@ -5,7 +5,7 @@ import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome, Apple } from "lucide-react
 import { supabase } from "../lib/supabase"; // adjust path as needed
 import { toast } from "sonner"; // optional: for notifications
 
-export function BusinessLogin() {
+export function CreatorLogin(){
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -146,7 +146,7 @@ export function BusinessLogin() {
           </div>
           
           <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest italic text-[#1D1D1D]/30">
-            Are you a creator? <Link to="/login/business" className="text-[#D2691E] hover:underline decoration-1 underline-offset-4">BUSINESS LOGIN →</Link>
+            Are you a business? <Link to="/login/business" className="text-[#D2691E] hover:underline decoration-1 underline-offset-4">BUSINESS LOGIN →</Link>
           </div>
         </div>
       </div>
