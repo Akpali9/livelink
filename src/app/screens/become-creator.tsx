@@ -275,10 +275,10 @@ export function BecomeCreator() {
                   <label className="text-[10px] font-black uppercase tracking-widest italic text-[#1D1D1D]/40">Phone Number</label>
                   <div className="relative flex">
                     <select className="bg-white border border-[#1D1D1D]/10 p-5 text-xs font-black uppercase tracking-tight outline-none border-r-0 rounded-none">
-                      <option>+234</option>
-                      <option>+263</option>
-                      <option>+27</option>
-                      <option>+233</option>
+                      <option value="+234">+234</option>
+                      <option value="+263">+263</option>
+                      <option value="+27">+27</option>
+                      <option value="+233">+233</option>
                     </select>
                     <div className="relative flex-1">
                       <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-[#389C9A]" />
@@ -300,10 +300,10 @@ export function BecomeCreator() {
                       className="w-full bg-white border border-[#1D1D1D]/10 p-5 text-xs font-black uppercase tracking-tight outline-none rounded-none"
                     >
                       <option value="">Select Country</option>
-                      <option>Nigeria</option>
-                      <option>Zimbabwe</option>
-                      <option>South Africa</option>
-                      <option>Ghana</option>
+                      <option value="Nigeria">Nigeria</option>
+                      <option value="Zimbabwe">Zimbabwe</option>
+                      <option value="South Africa">South Africa</option>
+                      <option value="Ghana">Ghana</option>
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
