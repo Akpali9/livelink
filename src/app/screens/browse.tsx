@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { useNavigate,Link } from "react-router";
 import {
   Search,
   Filter,
   ChevronRight,
   Star,
   X,
+  ChevronLeft,
   CheckCircle2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
@@ -18,6 +19,7 @@ const platforms = ["Twitch", "TikTok", "Instagram", "YouTube"];
 const countries = ["Any", "United Kingdom", "United States", "Canada", "France", "Germany"];
 
 export function Browse() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -72,9 +74,12 @@ export function Browse() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       {/* <AppHeader title="Browse Creators" showBack={true} /> */}
-
+     
       {/* Search & Filters */}
       <div className="px-6 py-6 sticky top-[84px] bg-white z-20 border-b border-[#1D1D1D]">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-6 opacity-40 italic">
+              <ChevronLeft className="w-4 h-4 text-[#1D1D1D]" /> Back
+            </button>
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1D1D1D]" />
