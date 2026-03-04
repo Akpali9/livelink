@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { motion } from "motion/react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Chrome, Apple } from "lucide-react";
-import { supabase } from "../lib/supabase"; // adjust path as needed
-import { toast } from "sonner"; // optional: for notifications
+import { supabase } from "../lib/supabase"; // your Supabase client
+import { toast } from "sonner";
 
 export function BusinessLogin() {
   const navigate = useNavigate();
@@ -16,21 +16,35 @@ export function BusinessLogin() {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // 1️⃣ Authenticate with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    setLoading(false);
+      if (error || !data.user) {
+        throw new Error(error?.message || "Login failed");
+      }
 
-    if (error) {
-      toast.error(error.message || "Login failed");
-      return;
-    }
+      // 2️⃣ Fetch business info from PostgreSQL
+      const { data: business, error: businessError } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("user_id", data.user.id)
+        .single();
 
-    if (data.user) {
+      if (businessError) throw new Error(businessError.message);
+
       toast.success("Login successful!");
+      console.log({ user: data.user, business }); // optional: use for dashboard
+
+      // 3️⃣ Navigate to dashboard
       navigate("/business/dashboard");
+    } catch (err: any) {
+      toast.error(err.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
