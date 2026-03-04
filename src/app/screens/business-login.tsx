@@ -18,10 +18,10 @@ export function BusinessLogin() {
 
     try {
       // 1️⃣ Authenticate with Supabase
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    const { data, error } = await supabase.auth.signInWithPassword({
+  email: email.trim(),
+  password: password.trim(),
+});
 
       if (error || !data.user) {
         throw new Error(error?.message || "Login failed");
