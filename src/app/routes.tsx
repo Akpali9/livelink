@@ -5,7 +5,7 @@ import { CreatorLogin } from "./screens/creator-login";
 import { BusinessLogin } from "./screens/business-login";
 import { Browse } from "./screens/browse";
 import { Profile } from "./screens/profile";
-import {AdminDashboard} from "./screen/AdminDashboard";
+import {AdminDashboard} from "./screen/admin-dashboard";
 import { Dashboard } from "./screens/dashboard";
 import { BusinessDashboard } from "./screens/business-dashboard";
 import { BusinessProfile } from "./screens/business-profile";
