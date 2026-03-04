@@ -37,10 +37,10 @@ export function CreatorLogin() {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: email.trim(),
+  password: password.trim(),
+});
 
     setLoading(false);
 
