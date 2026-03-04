@@ -83,7 +83,7 @@ export function BecomeBusiness() {
       gender: [],
       ageMin: 18,
       ageMax: 65,
-      phoneCountryCode: "+44",
+      phoneCountryCode: "+234",
       agreeToTerms: false
     },
     mode: "onChange"
@@ -400,10 +400,10 @@ export function BecomeBusiness() {
                       {...register("phoneCountryCode")}
                       className="bg-white border border-[#1D1D1D]/10 border-r-0 p-5 text-xs font-black uppercase tracking-tight outline-none rounded-none"
                     >
-                      <option value="+44">+44</option>
-                      <option value="+1">+1</option>
-                      <option value="+33">+33</option>
-                      <option value="+49">+49</option>
+                      <option value="+234">+234</option>
+                      <option value="+263">+263</option>
+                      <option value="+27">+27</option>
+                      <option value="+233">+233</option>
                     </select>
                     <div className="relative flex-1">
                       <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-30 text-[#389C9A]" />
