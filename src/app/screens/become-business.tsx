@@ -188,7 +188,26 @@ export function BecomeBusiness() {
     setStep(s => Math.max(s - 1, 1));
     window.scrollTo(0, 0);
   };
+const handleFinalSubmit = async () => {
+  if (!formData.agreeToTerms) return;
 
+  try {
+    const res = await fetch("/api/createBusinessUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || "Failed to create user");
+
+    toast.success("User and business created!");
+    navigate("/business/dashboard");
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+};
   if (isSubmitted) {
     return (
       <div className="flex flex-col min-h-screen bg-white items-center justify-center px-8 text-[#1D1D1D]">
