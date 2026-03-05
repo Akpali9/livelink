@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
+import { useBusinessRegistration } from "../hooks/useBusinessRegistration";
 import { 
   ChevronLeft, 
   ChevronRight, 
