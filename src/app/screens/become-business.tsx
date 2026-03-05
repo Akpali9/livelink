@@ -780,7 +780,7 @@ const onSubmit = async (data: BusinessFormData) => {
                   <input 
                     type="checkbox" 
                     {...register("agreeToTerms")}
-                    className="peer hidden" 
+                     
                   />
                   <div className={`mt-1 w-5 h-5 border-2 flex items-center justify-center transition-all rounded-none ${
                     agreeToTerms ? 'bg-[#389C9A] border-[#389C9A]' : 'border-[#1D1D1D] bg-white'
