@@ -891,9 +891,6 @@ const onSubmit = async (data: BusinessFormData) => {
             Please upload your ID document to continue
           </p>
         )}
-        {step === 5 && !agreeToTerms && (
-         
-        )}
       </div>
     </div>
   );
