@@ -83,10 +83,7 @@ export function BecomeBusiness() {
           }
         ]);
       const onSubmit = async (data: BusinessFormData) => {
-  if (!data.agreeToTerms) {
-    toast.error("You must agree to the terms");
-    return;
-  }
+  
 
   try {
     // 1️⃣ Create Auth User
