@@ -1,39 +1,59 @@
-// src/app/components/ProtectedRoute.tsx
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router';
+import { supabase } from '../lib/supabase';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  userType?: 'creator' | 'business';
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null while checking
+export function ProtectedRoute({ children, userType }: ProtectedRouteProps) {
+  const [loading, setLoading] = useState(true);
+  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsLoggedIn(!!session?.user);
-    };
-
-    checkSession();
-
-    // Listen for login/logout changes
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session?.user);
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    checkAuth();
   }, []);
 
-  // While checking session, don't render anything
-  if (isLoggedIn === null) return null;
+  const checkAuth = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setAuthorized(false);
+        setLoading(false);
+        return;
+      }
 
-  // If not logged in, redirect to home
-  if (!isLoggedIn) return <Navigate to="/" replace />;
+      // If user type is specified, check if user has correct type
+      if (userType) {
+        const userTypeFromMeta = user.user_metadata?.user_type;
+        
+        if (userTypeFromMeta === userType) {
+          setAuthorized(true);
+        } else {
+          setAuthorized(false);
+        }
+      } else {
+        // No specific type required, just authenticated
+        setAuthorized(true);
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setAuthorized(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // If logged in, render children
-  return <>{children}</>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#1D1D1D] border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  return authorized ? <>{children}</> : <Navigate to="/login" />;
 }
+
