@@ -818,17 +818,8 @@ const onSubmit = async (data: BusinessFormData) => {
     </button>
         </div>
         
-        {/* Step validation message */}
-        {!validateStep() && step < 5 && (
-          <p className="text-[9px] font-black uppercase text-red-500 mt-3 text-center">
-            Please fill in all required fields before continuing
-          </p>
-        )}
-        {step === 4 && !idFile && (
-          <p className="text-[9px] font-black uppercase text-red-500 mt-3 text-center">
-            Please upload your ID document to continue
-          </p>
-        )}
+       
+       
       </div>
     </div>
   );
