@@ -32,28 +32,28 @@ export function CreatorLogin() {
 };
   // Handle email/password login
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-const { data, error } = await supabase.auth.signInWithPassword({
-  email: email.trim(),
-  password: password.trim(),
-});
+  // Destructure 'data' and 'error' from the response of Supabase auth call
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.trim(),
+    password: password.trim(),
+  });
 
-    setLoading(false);
+  setLoading(false);
 
-    if (error) {
-      toast.error(error.message || "Login failed");
-      return;
-    }
+  if (error) {
+    toast.error(error.message || "Login failed");
+    return;
+  }
 
-    if (data.user) {
-      await createProfileIfNotExists(data.user); // Ensure the profile is created
-      toast.success("Login successful!");
-      navigate("/dashboard"); // Redirect to the dashboard
-    }
-  };
-
+  if (data.user) {
+    await createProfileIfNotExists(data.user); // Ensure the profile is created
+    toast.success("Login successful!");
+    navigate("/dashboard"); // Redirect to the dashboard
+  }
+};
   // Handle Google/Apple OAuth login
   const handleOAuthLogin = async (provider: "google" | "apple") => {
     const { error } = await supabase.auth.signInWithOAuth({
