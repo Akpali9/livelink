@@ -1,66 +1,47 @@
+import { useState } from "react";
+import { supabase } from "../lib/supabase"; // client anon key for storage
+import { toast } from "sonner";
 
-import { supabase } from "../lib/supabase";
+export const useBusinessRegistration = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-export function useBusinessRegistration() {
-  const submitRegistration = async (data: any, idFile: File) => {
+  const submitRegistration = async (formData: any, idFile: File) => {
+    setLoading(true);
+    setError(null);
+
     try {
-      // 1. Upload ID file to Supabase Storage
+      // 1️⃣ Upload ID file to Supabase Storage
       const fileExt = idFile.name.split(".").pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      const fileName = `ids/${Date.now()}.${fileExt}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("business-ids")
         .upload(fileName, idFile);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) throw new Error(uploadError.message);
 
+      // 2️⃣ Get public URL of uploaded file
       const { publicUrl } = supabase.storage.from("business-ids").getPublicUrl(fileName);
 
-      // 2. Hash password (optional if you use Supabase Auth)
-      const hashedPassword = data.password; // For demo. Use bcrypt in production
+      // 3️⃣ Call serverless function to create Auth user + business
+      const res = await fetch("/api/createBusinessUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData, idFileUrl: publicUrl }),
+      });
 
-      // 3. Insert into businesses table
-      const { error } = await supabase
-        .from("businesses")
-        .insert({
-          full_name: data.fullName,
-          job_title: data.jobTitle,
-          email: data.email,
-          password_hash: hashedPassword,
-          phone_number: data.phoneNumber,
-          phone_country_code: data.phoneCountryCode,
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to create user");
 
-          business_name: data.businessName,
-          business_type: data.businessType,
-          industry: data.industry,
-          description: data.description,
-          website: data.website,
-          socials: data.socials,
-          
-          country: data.country,
-          city: data.city,
-          postcode: data.postcode,
-          operating_time: data.operatingTime,
-          
-          goals: data.goals,
-          campaign_type: data.campaignType,
-          budget: data.budget,
-          age_min: data.ageMin,
-          age_max: data.ageMax,
-          gender: data.gender,
-          target_location: data.targetLocation,
-          
-          id_file_url: publicUrl,
-          referral: data.referral,
-          agree_to_terms: data.agreeToTerms,
-        });
-
-      if (error) throw error;
-
+      setLoading(false);
       return { success: true };
     } catch (err: any) {
-      return { success: false, error: err.message };
+      setLoading(false);
+      setError(err.message);
+      toast.error(err.message);
+      return { success: false };
     }
   };
 
-  return { submitRegistration, loading: false, error: null };
-}
+  return { submitRegistration, loading, error };
+};
