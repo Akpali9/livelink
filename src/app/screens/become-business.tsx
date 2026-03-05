@@ -895,9 +895,7 @@ const onSubmit = async (data: BusinessFormData) => {
           </p>
         )}
         {step === 5 && !agreeToTerms && (
-          <p className="text-[9px] font-black uppercase text-red-500 mt-2 text-center mb-2">
-            You must agree to the terms to submit
-          </p>
+         
         )}
       </div>
     </div>
