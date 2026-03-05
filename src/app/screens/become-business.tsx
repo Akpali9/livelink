@@ -82,69 +82,7 @@ export function BecomeBusiness() {
             agreed_to_terms: data.agreeToTerms,
           }
         ]);
-      const onSubmit = async (data: BusinessFormData) => {
-  
-
-  try {
-    // 1️⃣ Create Auth User
-    const { data: authData, error: authError } =
-      await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-      });
-
-    if (authError) throw authError;
-
-    const userId = authData.user?.id;
-    if (!userId) throw new Error("User not created");
-
-    // 2️⃣ Insert into businesses table
-    const { error: insertError } = await supabase
-      .from("businesses")
-      .insert({
-        user_id: userId,
-        full_name: data.fullName,
-        job_title: data.jobTitle,
-        email: data.email,
-        phone_number: data.phoneNumber,
-        phone_country_code: data.phoneCountryCode,
-        business_name: data.businessName,
-        business_type: data.businessType,
-        industry: data.industry,
-        description: data.description,
-        website: data.website,
-        socials: data.socials,
-        country: data.country,
-        city: data.city,
-        postcode: data.postcode,
-        operating_time: data.operatingTime,
-        goals: data.goals,
-        campaign_type: data.campaignType,
-        budget: data.budget,
-        age_min: data.ageMin,
-        age_max: data.ageMax,
-        gender: data.gender,
-        target_location: data.targetLocation,
-        referral: data.referral,
-        agreed_to_terms: data.agreeToTerms,
-      });
-
-    if (insertError) throw insertError;
-
-    toast.success("Registration successful!");
-
-    // Optional: auto-login
-    await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
-
-    navigate("/business/dashboard");
-  } catch (err: any) {
-    toast.error(err.message);
-  }
-};
-
+     
       if (insertError) throw new Error(insertError.message);
 
       // Handle successful business registration
