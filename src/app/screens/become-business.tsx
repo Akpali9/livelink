@@ -188,26 +188,7 @@ export function BecomeBusiness() {
     setStep(s => Math.max(s - 1, 1));
     window.scrollTo(0, 0);
   };
-const handleFinalSubmit = async () => {
-  if (!formData.agreeToTerms) return;
 
-  try {
-    const res = await fetch("/api/createBusinessUser", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.error || "Failed to create user");
-
-    toast.success("User and business created!");
-    navigate("/business/dashboard");
-  } catch (error: any) {
-    toast.error(error.message);
-  }
-};
   if (isSubmitted) {
     return (
       <div className="flex flex-col min-h-screen bg-white items-center justify-center px-8 text-[#1D1D1D]">
@@ -809,7 +790,7 @@ const handleFinalSubmit = async () => {
       </div>
 
       {/* Footer Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t-2 border-[#1D1D1D] z-50 max-w-[480px] mx-auto">
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t-2 border-[#1D1D1D] z-50 max-w-[480px] mx-auto" style="margin-top:50px;">
         <div className="flex gap-4">
           {step > 1 && (
             <button 
