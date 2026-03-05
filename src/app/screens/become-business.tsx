@@ -797,7 +797,7 @@ const onSubmit = async (data: BusinessFormData) => {
       </div>
 
       {/* Footer Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t-2 border-[#1D1D1D] z-50 max-w-[480px] mx-auto" >
+      <div className="fixed mt-8 bottom-0 left-0 right-0 p-6 bg-white border-t-2 border-[#1D1D1D] z-50 max-w-[480px] mx-auto" >
         <div className="flex gap-4">
           {step > 1 && (
             <button 
