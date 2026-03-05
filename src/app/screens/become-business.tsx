@@ -1,40 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router";
-import { useBusinessRegistration } from "../hooks/useBusinessRegistration";
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  Plus, 
-  X, 
-  Eye, 
-  EyeOff, 
-  Upload, 
-  CheckCircle2, 
-  Instagram, 
-  Youtube, 
-  Facebook, 
-  MessageSquare,
-  ArrowRight,
-  Info,
-  Calendar,
-  Lock,
-  Mail,
-  Smartphone,
-  Globe,
-  Briefcase,
-  Target,
-  Image as LucideImageIcon,
-  Twitter,
-  Linkedin,
-  AlertCircle
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { useBusinessRegistration } from "../hooks/useBusinessRegistration";
-import { AppHeader } from "../components/app-header";
+import { useForm } from "react-hook-form";
+import { supabase } from "../lib/supabase";  // import your Supabase client
 
 type BusinessFormData = {
-  // Step 1
   fullName: string;
   jobTitle: string;
   email: string;
@@ -42,7 +10,6 @@ type BusinessFormData = {
   confirmPassword: string;
   phoneNumber: string;
   phoneCountryCode: string;
-  // Step 2
   businessName: string;
   businessType: string;
   industry: string;
@@ -53,7 +20,6 @@ type BusinessFormData = {
   city: string;
   postcode: string;
   operatingTime: string;
-  // Step 3
   goals: string[];
   campaignType: string;
   budget: string;
@@ -61,39 +27,139 @@ type BusinessFormData = {
   ageMax: number;
   gender: string[];
   targetLocation: string;
-  // Step 5
   referral: string;
   agreeToTerms: boolean;
 };
 
 export function BecomeBusiness() {
-  const navigate = useNavigate();
-  const [step, setStep] = useState(1);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [idFile, setIdFile] = useState<File | null>(null);
-  const [idPreview, setIdPreview] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  
-  const { submitRegistration, loading, error } = useBusinessRegistration();
-
-  const { register, handleSubmit, watch, control, formState: { errors, isValid } } = useForm<BusinessFormData>({
-    defaultValues: {
-      socials: [{ platform: "Instagram", handle: "" }],
-      goals: [],
-      gender: [],
-      ageMin: 18,
-      ageMax: 65,
-      phoneCountryCode: "+234",
-      agreeToTerms: false
-    },
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, watch, control } = useForm<BusinessFormData>({
     mode: "onChange"
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "socials"
-  });
+  const onSubmit = async (data: BusinessFormData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Sign up the user with email and password
+      const { user, error: authError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (authError) throw new Error(authError.message);
+
+      // After sign-up, insert business data into PostgreSQL
+      const { data: businessData, error: insertError } = await supabase
+        .from('businesses')
+        .insert([
+          {
+            full_name: data.fullName,
+            email: data.email,
+            password_hash: data.password, // Remember to hash this password before storing in real applications
+            phone_number: data.phoneNumber,
+            phone_country_code: data.phoneCountryCode,
+            business_name: data.businessName,
+            business_type: data.businessType,
+            industry: data.industry,
+            description: data.description,
+            website: data.website,
+            socials: JSON.stringify(data.socials),
+            country: data.country,
+            city: data.city,
+            postcode: data.postcode,
+            operating_time: data.operatingTime,
+            goals: data.goals,
+            campaign_type: data.campaignType,
+            budget: data.budget,
+            age_min: data.ageMin,
+            age_max: data.ageMax,
+            gender: data.gender,
+            target_location: data.targetLocation,
+            referral: data.referral,
+            agreed_to_terms: data.agreeToTerms,
+          }
+        ]);
+      const onSubmit = async (data: BusinessFormData) => {
+  if (!data.agreeToTerms) {
+    toast.error("You must agree to the terms");
+    return;
+  }
+
+  try {
+    // 1️⃣ Create Auth User
+    const { data: authData, error: authError } =
+      await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+      });
+
+    if (authError) throw authError;
+
+    const userId = authData.user?.id;
+    if (!userId) throw new Error("User not created");
+
+    // 2️⃣ Insert into businesses table
+    const { error: insertError } = await supabase
+      .from("businesses")
+      .insert({
+        user_id: userId,
+        full_name: data.fullName,
+        job_title: data.jobTitle,
+        email: data.email,
+        phone_number: data.phoneNumber,
+        phone_country_code: data.phoneCountryCode,
+        business_name: data.businessName,
+        business_type: data.businessType,
+        industry: data.industry,
+        description: data.description,
+        website: data.website,
+        socials: data.socials,
+        country: data.country,
+        city: data.city,
+        postcode: data.postcode,
+        operating_time: data.operatingTime,
+        goals: data.goals,
+        campaign_type: data.campaignType,
+        budget: data.budget,
+        age_min: data.ageMin,
+        age_max: data.ageMax,
+        gender: data.gender,
+        target_location: data.targetLocation,
+        referral: data.referral,
+        agreed_to_terms: data.agreeToTerms,
+      });
+
+    if (insertError) throw insertError;
+
+    toast.success("Registration successful!");
+
+    // Optional: auto-login
+    await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+
+    navigate("/business/dashboard");
+  } catch (err: any) {
+    toast.error(err.message);
+  }
+};
+
+      if (insertError) throw new Error(insertError.message);
+
+      // Handle successful business registration
+      console.log("Business registered successfully:", businessData);
+      alert("Your business has been registered successfully!");
+      // Navigate to a different page or reset the form as needed
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -806,21 +872,15 @@ const onSubmit = async (data: BusinessFormData) => {
             >
               Back
             </button>
-          )}
-          <button 
-            onClick={step === 5 ? handleSubmit(onSubmit) : nextStep}
-            disabled={!validateStep() || loading}
-            className={`flex-1 flex items-center justify-between p-6 font-black uppercase tracking-tight transition-all rounded-none italic ${
-              validateStep() && !loading
-                ? 'bg-[#1D1D1D] text-white active:scale-[0.98]' 
-                : 'bg-[#1D1D1D]/30 text-white/50 cursor-not-allowed'
-            }`}
-          >
-            <span>
-              {loading ? 'Submitting...' : (step === 5 ? 'Submit Registration' : 'Continue')}
-            </span>
-            {!loading && <ArrowRight className="w-5 h-5 text-[#FEDB71]" />}
-          </button>
+          )} 
+          <button
+      type="button"
+      disabled={!agreeToTerms || loading}
+      onClick={handleSubmit(onSubmit)}
+      className="w-full bg-[#1D1D1D] text-white p-4 font-black uppercase italic tracking-wide disabled:opacity-50 active:scale-[0.98] transition-all"
+    >
+      {loading ? "Submitting..." : "Submit Registration"}
+    </button>
         </div>
         
         {/* Step validation message */}
