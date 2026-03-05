@@ -145,20 +145,26 @@ export function BecomeBusiness() {
     setIdFile(null);
     setIdPreview(null);
   };
+const onSubmit = async (data: BusinessFormData) => {
+  if (!idFile) {
+    setUploadError("Please upload a government ID for verification");
+    return;
+  }
 
-  const onSubmit = async (data: BusinessFormData) => {
-    if (!idFile) {
-      setUploadError('Please upload a government ID for verification');
-      return;
-    }
+  const result = await submitRegistration(data, idFile);
+  if (result.success) {
+    setIsSubmitted(true);
+    window.scrollTo(0, 0);
 
-    const result = await submitRegistration(data, idFile);
-    
-    if (result.success) {
-      setIsSubmitted(true);
-      window.scrollTo(0, 0);
-    }
-  };
+    // Optional: auto-login after creation
+    await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password
+    });
+
+    navigate("/business/dashboard");
+  }
+};
 
   const validateStep = () => {
     switch(step) {
