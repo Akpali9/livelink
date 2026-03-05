@@ -27,6 +27,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { AppHeader } from "../components/app-header";
+import { toast, Toaster } from "sonner";
 
 type CreatorFormData = {
   // Step 1
@@ -52,6 +53,8 @@ type CreatorFormData = {
   audienceBio: string;
   // Step 4
   referral: string;
+  // Terms agreement
+  termsAgreed: boolean;
 };
 
 export function BecomeCreator() {
@@ -64,7 +67,8 @@ export function BecomeCreator() {
     defaultValues: {
       platforms: [{ type: "Twitch", username: "", url: "" }],
       days: [],
-      categories: []
+      categories: [],
+      termsAgreed: false
     },
     mode: "onChange"
   });
@@ -76,6 +80,7 @@ export function BecomeCreator() {
 
   const password = watch("password");
   const dob = watch("dob");
+  const termsAgreed = watch("termsAgreed");
 
   const getPasswordStrength = () => {
     if (!password) return null;
@@ -96,18 +101,32 @@ export function BecomeCreator() {
     return age < 18;
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: CreatorFormData) => {
+    if (!data.termsAgreed) {
+      toast.error("Please agree to the Terms of Service and Privacy Policy");
+      return;
+    }
+    
     console.log("Form Data:", data);
     setIsSubmitted(true);
     window.scrollTo(0, 0);
+    toast.success("Application submitted successfully!");
   };
 
-  const nextStep = () => setStep(s => Math.min(s + 1, 5));
+  const nextStep = () => {
+    if (step === 5 && !termsAgreed) {
+      toast.error("Please agree to the terms to continue");
+      return;
+    }
+    setStep(s => Math.min(s + 1, 5));
+  };
+  
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
   if (isSubmitted) {
     return (
       <div className="flex flex-col min-h-screen bg-white items-center justify-center px-8 text-[#1D1D1D]">
+        <Toaster position="top-center" richColors />
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -158,7 +177,9 @@ export function BecomeCreator() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white pb-32 text-[#1D1D1D]">
-            {/* Header */}
+      <Toaster position="top-center" richColors />
+      
+      {/* Header */}
       <div className="px-8 pt-12 pb-8 border-b-2 border-[#1D1D1D]">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-6 opacity-40 italic">
           <ChevronLeft className="w-4 h-4 text-[#1D1D1D]" /> Back
@@ -600,14 +621,33 @@ export function BecomeCreator() {
 
               <div className="mt-8 flex flex-col gap-4">
                 <label className="flex items-start gap-3 cursor-pointer group">
-                  <input type="checkbox" required className="peer hidden" />
-                  <div className="mt-1 w-5 h-5 border-2 border-[#1D1D1D] flex items-center justify-center bg-white peer-checked:bg-[#389C9A] peer-checked:border-[#389C9A] transition-all rounded-none">
-                    <CheckCircle2 className="w-3 h-3 text-white" />
+                  <input 
+                    type="checkbox" 
+                    {...register("termsAgreed")}
+                    className="hidden" 
+                    id="termsCheckbox"
+                  />
+                  <div 
+                    onClick={() => {
+                      const checkbox = document.getElementById('termsCheckbox') as HTMLInputElement;
+                      if (checkbox) checkbox.click();
+                    }}
+                    className={`mt-1 w-5 h-5 border-2 border-[#1D1D1D] flex items-center justify-center bg-white transition-all rounded-none cursor-pointer ${
+                      termsAgreed ? 'bg-[#389C9A] border-[#389C9A]' : ''
+                    }`}
+                  >
+                    {termsAgreed && <CheckCircle2 className="w-3 h-3 text-white" />}
                   </div>
                   <span className="text-[10px] font-bold leading-tight opacity-60 italic uppercase tracking-tight">
-                    I agree to LiveLink's Terms of Service and Privacy Policy. I confirm that all information provided is accurate and my own.
+                    I agree to LiveLink's <Link to="/terms" className="underline font-black hover:text-[#389C9A]">Terms of Service</Link> and 
+                    <Link to="/privacy" className="underline font-black hover:text-[#389C9A]"> Privacy Policy</Link>. I confirm that all information provided is accurate and my own.
                   </span>
                 </label>
+                {!termsAgreed && step === 5 && (
+                  <p className="text-[9px] font-black uppercase text-red-500 mt-1 italic">
+                    You must agree to the terms to submit your application
+                  </p>
+                )}
               </div>
             </section>
           </motion.div>
@@ -627,7 +667,12 @@ export function BecomeCreator() {
           )}
           <button 
             onClick={step === 5 ? handleSubmit(onSubmit) : nextStep}
-            className="flex-1 flex items-center justify-between bg-[#1D1D1D] text-white p-6 font-black uppercase tracking-tight active:scale-[0.98] transition-all rounded-none italic"
+            className={`flex-1 flex items-center justify-between p-6 font-black uppercase tracking-tight active:scale-[0.98] transition-all rounded-none italic ${
+              step === 5 && !termsAgreed 
+                ? 'bg-[#1D1D1D]/50 cursor-not-allowed' 
+                : 'bg-[#1D1D1D] text-white'
+            }`}
+            disabled={step === 5 && !termsAgreed}
           >
             <span>{step === 5 ? "Submit Application" : "Continue"}</span>
             <ArrowRight className="w-5 h-5 text-[#FEDB71]" />
@@ -640,33 +685,142 @@ export function BecomeCreator() {
 
 export function AdminApplicationQueue() {
   const [apps, setApps] = useState([
-    { id: 1, name: "Jordan Plays", platform: "Twitch", viewers: "450", status: "Pending" },
-    { id: 2, name: "Sarah Stream", platform: "TikTok", viewers: "1.2k", status: "Pending" }
+    { id: 1, name: "Jordan Plays", platform: "Twitch", viewers: "450", status: "Pending", appliedAt: "2024-01-15" },
+    { id: 2, name: "Sarah Stream", platform: "TikTok", viewers: "1.2k", status: "Pending", appliedAt: "2024-01-14" }
   ]);
+
+  const handleApprove = (id: number) => {
+    toast.success("Application approved! Creator will be notified.");
+    setApps(prev => prev.filter(app => app.id !== id));
+  };
+
+  const handleReject = (id: number) => {
+    toast.error("Application rejected.");
+    setApps(prev => prev.filter(app => app.id !== id));
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#1D1D1D]">
-      <AppHeader title="Admin Review" />
-      <main className="p-8 max-w-[600px] mx-auto w-full">
-        <h1 className="text-3xl font-black uppercase tracking-tighter italic mb-8">Pending Applications</h1>
-        <div className="flex flex-col gap-4">
-          {apps.map(app => (
-            <div key={app.id} className="bg-[#F8F8F8] border-2 border-[#1D1D1D] p-6 flex flex-col gap-4 rounded-none">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-black uppercase tracking-tight text-lg italic">{app.name}</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#389C9A]">{app.platform} · {app.viewers} Avg Viewers</p>
+      <Toaster position="top-center" richColors />
+      <AppHeader title="Admin Review" showLogo />
+      <main className="p-8 max-w-[600px] mx-auto w-full pb-32">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-black uppercase tracking-tighter italic">Pending Applications</h1>
+          <span className="bg-[#FEDB71] px-3 py-1 text-[10px] font-black uppercase tracking-widest">
+            {apps.length} new
+          </span>
+        </div>
+        
+        {apps.length === 0 ? (
+          <div className="border-2 border-[#1D1D1D]/10 p-12 text-center">
+            <p className="text-xs text-[#1D1D1D]/40">No pending applications to review.</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {apps.map(app => (
+              <motion.div 
+                key={app.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-[#F8F8F8] border-2 border-[#1D1D1D] p-6 flex flex-col gap-4 rounded-none"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-black uppercase tracking-tight text-lg italic">{app.name}</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#389C9A]">
+                      {app.platform} · {app.viewers} Avg Viewers
+                    </p>
+                    <p className="text-[8px] font-medium text-[#1D1D1D]/40 uppercase tracking-widest mt-1">
+                      Applied: {new Date(app.appliedAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <span className="px-2 py-1 bg-[#FEDB71] text-[#1D1D1D] text-[8px] font-black uppercase border border-[#1D1D1D]/10">
+                    Pending Review
+                  </span>
                 </div>
-                <span className="px-2 py-1 bg-[#FEDB71] text-[#1D1D1D] text-[8px] font-black uppercase border border-[#1D1D1D]/10">Pending Review</span>
-              </div>
-              <div className="flex gap-2">
-                <button className="flex-1 bg-[#1D1D1D] text-white p-3 text-[10px] font-black uppercase tracking-widest italic border-2 border-[#1D1D1D]">Approve</button>
-                <button className="flex-1 border-2 border-[#1D1D1D] text-[#1D1D1D] p-3 text-[10px] font-black uppercase tracking-widest italic">Reject</button>
-              </div>
+                
+                {/* Quick Stats */}
+                <div className="grid grid-cols-3 gap-2 py-4 border-t border-b border-[#1D1D1D]/10">
+                  <div className="text-center">
+                    <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Platforms</p>
+                    <p className="text-xs font-black mt-1">2</p>
+                  </div>
+                  <div className="text-center border-l border-r border-[#1D1D1D]/10">
+                    <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Categories</p>
+                    <p className="text-xs font-black mt-1">Gaming</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Streams/Week</p>
+                    <p className="text-xs font-black mt-1">4-5</p>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => handleApprove(app.id)}
+                    className="flex-1 bg-[#1D1D1D] text-white p-4 text-[10px] font-black uppercase tracking-widest italic border-2 border-[#1D1D1D] hover:bg-[#389C9A] hover:border-[#389C9A] transition-all active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Approve
+                  </button>
+                  <button 
+                    onClick={() => handleReject(app.id)}
+                    className="flex-1 border-2 border-[#1D1D1D] text-[#1D1D1D] p-4 text-[10px] font-black uppercase tracking-widest italic hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-95 flex items-center justify-center gap-2"
+                  >
+                    <X className="w-3.5 h-3.5" /> Reject
+                  </button>
+                </div>
+
+                {/* View Details Link */}
+                <Link 
+                  to={`/admin/application/${app.id}`}
+                  className="text-[9px] font-black uppercase tracking-widest text-[#389C9A] underline italic text-center hover:opacity-70 transition-opacity"
+                >
+                  View Full Application Details
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Admin Quick Stats */}
+        <div className="mt-12 pt-8 border-t-2 border-[#1D1D1D]/10">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6 opacity-40">Quick Stats</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-[#F8F8F8] p-4 text-center">
+              <p className="text-2xl font-black italic text-[#389C9A]">{apps.length}</p>
+              <p className="text-[8px] font-black uppercase tracking-widest mt-1">Pending</p>
             </div>
-          ))}
+            <div className="bg-[#F8F8F8] p-4 text-center">
+              <p className="text-2xl font-black italic text-[#FEDB71]">12</p>
+              <p className="text-[8px] font-black uppercase tracking-widest mt-1">Approved</p>
+            </div>
+            <div className="bg-[#F8F8F8] p-4 text-center">
+              <p className="text-2xl font-black italic text-[#1D1D1D]/40">3</p>
+              <p className="text-[8px] font-black uppercase tracking-widest mt-1">Rejected</p>
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Admin Bottom Nav */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#1D1D1D] p-4 max-w-[480px] mx-auto">
+        <div className="flex justify-around">
+          <button className="flex flex-col items-center gap-1 text-[#389C9A]">
+            <ShieldCheck className="w-5 h-5" />
+            <span className="text-[8px] font-black uppercase tracking-widest">Review</span>
+          </button>
+          <button className="flex flex-col items-center gap-1 opacity-40">
+            <CheckCircle2 className="w-5 h-5" />
+            <span className="text-[8px] font-black uppercase tracking-widest">Approved</span>
+          </button>
+          <button className="flex flex-col items-center gap-1 opacity-40">
+            <X className="w-5 h-5" />
+            <span className="text-[8px] font-black uppercase tracking-widest">Rejected</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
