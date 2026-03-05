@@ -13,25 +13,23 @@ export function CreatorLogin() {
   const [loading, setLoading] = useState(false);
 
   // Create a profile if not exists
-  const createProfileIfNotExists = async (user: any) => {
-    try {
-      const { data, error } = await supabase.from("profiles").upsert({
+ const createProfileIfNotExists = async (user: any) => {
+  const { error } = await supabase
+    .from("profiles")
+    .upsert(
+      {
         id: user.id,
-        role: "creator", // Default role as 'creator'
-        full_name: user.user_metadata?.full_name || "Test User", // Default full name
-        avatar_url: user.user_metadata?.avatar_url || "", // Default empty avatar
-      });
+        role: "creator",
+        full_name: user.user_metadata?.full_name ?? "",
+        avatar_url: user.user_metadata?.avatar_url ?? "",
+      },
+      { onConflict: "id" }
+    );
 
-      if (error) {
-        console.error("Profile creation failed:", error.message);
-      } else {
-        console.log("Profile created/updated:", data);
-      }
-    } catch (error) {
-      console.error("Error creating profile:", error);
-    }
-  };
-
+  if (error) {
+    console.error("Profile error:", error.message);
+  }
+};
   // Handle email/password login
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
