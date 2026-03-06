@@ -14,11 +14,7 @@ import {
 import { createClient } from "@supabase/supabase-js";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { AppHeader } from "../components/app-header";
-
-// Initialize Supabase client
-const supabaseUrl = "https://bcteuanlownbanppggew.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdGV1YW5sb3duYmFucHBnZ2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDM4MDcsImV4cCI6MjA4NzY3OTgwN30.YW2O1MvkRkpB8ezedFdvwrWHymiXiHcrU5DGj1mmcg4";
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../lib/supabase";
 
 export function GigAccepted() {
   const navigate = useNavigate();
