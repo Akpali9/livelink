@@ -18,7 +18,24 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 // ─── Shared Types ─────────────────────────────────────────────────────────────
-
+// Helper function to check if we're connected
+export const checkSupabaseConnection = async () => {
+  try {
+    const { error } = await supabase
+      .from('creators')
+      .select('count', { count: 'exact', head: true })
+    
+    if (error) {
+      console.error('Supabase connection error:', error)
+      return false
+    }
+    
+    console.log('✅ Supabase connected successfully')
+    return true
+  } catch (err) {
+    console.error('Failed to connect to Supabase:', err)
+    return false
+  };
 export type Tables = {
   creator_profiles: {
     id: string;
