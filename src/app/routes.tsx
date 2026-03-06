@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouteObject, redirect } from "react-router";
 import { Home } from "./screens/home";
 import { LoginPortal } from "./screens/login-portal";
@@ -38,6 +39,7 @@ import { Settings } from "./screens/settings";
 import { BusinessSettings } from "./screens/business-settings";
 import { AdminDashboard } from "./screens/admin-dashboard";
 import { supabase } from "./lib/supabase";
+import { Suspense } from "react";
 
 async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession();
@@ -91,11 +93,27 @@ async function loadUser() {
     return { user: session.user, profile, userType };
   }
   return { user: session.user, profile: null, userType };
-}
+};
+const LoadingScreen = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-center">
+      <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p className="text-gray-600">Loading application...</p>
+    </div>
+  </div>
+);
+const RootWithFallback = () => {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <RootLayout />
+    </Suspense>
+  );
+};
 
 const routes: RouteObject[] = [
   {
     path: "/",
+    element: <RootWithFallback />,
     Component: RootLayout,
     loader: loadUser,
     children: [
