@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { User } from '@supabase/supabase-js';
 
-interface AuthState {
+type AuthState ={
   user: User | null;
   loading: boolean;
   error: Error | null;
