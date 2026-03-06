@@ -65,7 +65,7 @@ function SectionError({ message, onRetry }: { message: string; onRetry: () => vo
 }
 
 export function Dashboard() {
-    const { user, profile, userType } = useAuth();
+    const { user, userType } = useAuth();
   const navigate = useNavigate();
   const earningsRef = useRef<HTMLDivElement>(null);
   const [creatorId, setCreatorId] = useState<string | null>(null);

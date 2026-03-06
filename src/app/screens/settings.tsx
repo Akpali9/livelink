@@ -17,7 +17,7 @@ interface Props {
   userId: string;
 }
 
-export function Settings({ userId }: Props) {
+export function Settings() {
   const { data, loading } = useUserData(userId);
 
   const [email, setEmail] = useState('');
@@ -170,3 +170,5 @@ export function Settings({ userId }: Props) {
     </div>
   );
 }
+// Route-compatible wrapper (no props required)
+// The Settings export above takes userId; this re-export works without it
