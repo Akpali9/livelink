@@ -6,11 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { AppHeader } from "../components/app-header";
 import { BottomNav } from "../components/bottom-nav";
-
-// Initialize Supabase client
-const supabaseUrl = "https://sivlvqpkgilbpvzuuwzc.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpdmx2cXBrZ2lsYnB2enV1d3pjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0NTk2ODcsImV4cCI6MjA4ODAzNTY4N30.bbpOoQOKe7Jyh05tVYNLPv13xjwOYVaGb0sjiH-vgzk";  // Replace with your Supabase Key
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../lib/supabase";
 
 export function LiveCampaignUpdate() {
   const navigate = useNavigate();
